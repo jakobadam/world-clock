@@ -5,9 +5,24 @@
 /**
  * Change timezone of the given date.
  *
- * en-US formatted date strings, e.g., '10/23/2023, 11:00:00 AM', as input for `Date()` works well.
+ * Note: en-US formatted date strings, e.g., '10/23/2023, 11:00:00 AM', as input for `Date()` works well.
  *
- * See: https://stackoverflow.com/questions/10087819/convert-date-to-another-timezone-in-javascript
+ * More details
+ *
+ * For example, given a user in Dublin:
+ *
+ *     new Date()
+ *     > Wed Oct 11 2023 08:45:00 GMT+0100 (Britisk sommertid)
+ *
+ * Then get the same date without timezone, but in DK
+ *
+ *     new Date().toLocaleString('en-US', {timeZone: 'Europe/Copenhagen'})
+ *     > '10/11/2023, 9:45:00 AM'
+ *
+ * And, then convert to a full date
+ *
+ *     new Date(new Date().toLocaleString('en-US', {timeZone: 'Europe/Copenhagen'}))
+ *     Wed Oct 11 2023 09:45:00 GMT+0100 (Britisk sommertid)
  */
 export function changeTimezone(date: Date, timezone: string) {
     const dateInUsFormat = date.toLocaleString('en-US', {timeZone: timezone});
@@ -40,6 +55,7 @@ function dateFormatterEnUsWithTz(timezone: string) {
  * The setTimezoneHours(), similar to setUTCHours, sets the hours according to the given timezone.
  */
 export function setTimezoneHours(date: Date, hours: number, timezone: string) {
+    const d = new Date(date).setHours(0,0,0,0);
     const parts = dateFormatterEnUsWithTz(timezone)
         .formatToParts(date)
         .map((p) => {

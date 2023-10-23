@@ -11,7 +11,6 @@ describe('timezone', () => {
 
             expect(date_23.toISOString()).toBe('2023-10-23T21:00:00.000Z')
         });
-
     });
 
     describe('changeTimezone()', () => {
