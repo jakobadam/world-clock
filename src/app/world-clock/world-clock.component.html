@@ -1,6 +1,5 @@
 <h1>World clock</h1>
 
-
 <mat-form-field class="example-full-width">
   <mat-label>Timezone</mat-label>
 
@@ -20,11 +19,12 @@
   </mat-autocomplete>
 </mat-form-field>
 
-<table>
+<table *ngIf="now$ | async as now">
   <tr *ngFor="let tz of timezones">
     <td>{{tz}}</td>
-    <td><h2>{{formatTime(getTimeInTimezone(tz))}}</h2></td>
+    <td><h2>{{getTimeInTimezone(now, tz) | time }}</h2></td>
+    <td>08:00 in that timezone is {{ getTimeAtHoursInTimezone(now, 8, tz) | time}}</td>
   </tr>
 </table>
 
-
+<h2>Set alarm in dk time</h2>

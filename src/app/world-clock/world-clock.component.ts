@@ -1,22 +1,35 @@
-import { Component } from '@angular/core';
+import {Component, Pipe} from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {timezone} from "./timezone-helpers";
+import {changeTimezone, formatTime, getSupportedTimezones, setTimezoneHours} from "./timezone-helpers";
 import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatInputModule} from "@angular/material/input";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import {FormsModule} from "@angular/forms";
+import {map, timer} from "rxjs";
 
-const SUPPORTED_TIMEZONES = timezone.getSupportedTimezones();
+const SUPPORTED_TIMEZONES = getSupportedTimezones();
+
+@Pipe({
+  name: 'time',
+  standalone: true,
+  pure: true
+})
+export class TimeFormatPipe {
+
+  transform(date: Date): any {
+    return formatTime(date);
+  }
+}
 
 @Component({
   selector: 'app-world-clock',
   standalone: true,
-  imports: [CommonModule, MatAutocompleteModule, MatInputModule, FormsModule],
+  imports: [CommonModule, MatAutocompleteModule, MatInputModule, FormsModule, TimeFormatPipe],
   templateUrl: './world-clock.component.html',
   styleUrls: ['./world-clock.component.css']
 })
 export class WorldClockComponent {
-  now = new Date();
+  now$ = timer(0, 1000).pipe(map(() => new Date()));
 
   supportedTimezones = SUPPORTED_TIMEZONES;
   filteredTimezones = this.supportedTimezones;
@@ -40,13 +53,14 @@ export class WorldClockComponent {
     this.timezones.push(timezone);
   }
 
-  getTimeInTimezone(tz: string) {
-    return timezone.changeTimezone(this.now, tz);
+  getTimeInTimezone(date:Date, tz: string) {
+    return changeTimezone(date, tz);
   }
 
-  formatTime(date: Date) {
-    // '2023-10-10T12:04:29.320Z'
-    return date.toISOString().slice(11, 16)
+  getTimeAtHoursInTimezone(date: Date, hours: number, timezone: string) {
+    const d = new Date(date);
+    d.setMinutes(0,0,0);
+    return setTimezoneHours(d, hours, timezone);
   }
 
 }
