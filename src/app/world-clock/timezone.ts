@@ -21,12 +21,13 @@ export function setDkHours(date: Date, hours: number) {
 /**
  * Gets a en-US date string formatter, with an appended timezone.
  *
- * Produces a date string, such as: '10/23/2023, 11:00:00 AM GMT+2', parsable by Date().
+ * Produces a date string, such as: '10/23/2023, 11:00:00 GMT+2', parsable by Date().
  */
 function dateFormatterEnUsWithTz(timezone: string) {
     return new Intl.DateTimeFormat('en-US', {
         timeZone: timezone,
         hour: 'numeric',
+        hour12: false,
         minute: 'numeric',
         month: 'numeric',
         day: 'numeric',
