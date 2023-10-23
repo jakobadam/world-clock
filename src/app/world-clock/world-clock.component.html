@@ -23,7 +23,7 @@
   <tr *ngFor="let tz of timezones">
     <td>{{tz}}</td>
     <td><h2>{{getTimeInTimezone(now, tz) | time }}</h2></td>
-    <td>08:00 in that timezone is {{ getTimeAtHoursInTimezone(now, 8, tz) | time}}</td>
+    <td>08:00 in that timezone is {{ getTimeAtHoursInTimezone(now, 8, tz) | time}} here</td>
   </tr>
 </table>
 

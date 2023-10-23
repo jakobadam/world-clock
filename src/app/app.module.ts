@@ -22,9 +22,9 @@ export class AppModule {
 
   constructor(private injector: Injector) {}
 
-  ngDoBootstrap() {
-    const worldClockElement = createCustomElement(WorldClockComponent, { injector: this.injector });
-    customElements.define('aw-world-clock', worldClockElement);
-  }
+  // ngDoBootstrap() {
+  //   const worldClockElement = createCustomElement(WorldClockComponent, { injector: this.injector });
+  //   customElements.define('aw-world-clock', worldClockElement);
+  // }
 
 }
