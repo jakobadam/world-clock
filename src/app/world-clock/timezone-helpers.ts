@@ -34,6 +34,9 @@ function dateFormatterEnUsWithTz(timezone: string) {
     })
 }
 
+/**
+ * The setTimezoneHours(), similar to setUTCHours, sets the hours according to the given timezone.
+ */
 export function setTimezoneHours(date: Date, hours: number, timezone: string) {
     // '10/23/2023, 11:00:00 AM GMT+2'
     const enUsDateStringParts = dateFormatterEnUsWithTz(timezone)
