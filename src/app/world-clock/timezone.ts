@@ -1,5 +1,5 @@
 ﻿export function getSupportedTimezones(): string[] {
-    return (Intl as any).supportedValuesOf('timeZone');
+  return (Intl as any).supportedValuesOf('timeZone');
 }
 
 /**
@@ -25,12 +25,12 @@
  *     Wed Oct 11 2023 09:45:00 GMT+0100 (Britisk sommertid)
  */
 export function changeTimezone(date: Date, timezone: string) {
-    const dateInUsFormat = date.toLocaleString('en-US', {timeZone: timezone});
-    return new Date(dateInUsFormat);
+  const dateInUsFormat = date.toLocaleString('en-US', { timeZone: timezone });
+  return new Date(dateInUsFormat);
 }
 
 export function setDkHours(date: Date, hours: number) {
-    return setTimezoneHours(date, hours, 'europe/copenhagen');
+  return setTimezoneHours(date, hours, 'europe/copenhagen');
 }
 
 /**
@@ -39,38 +39,36 @@ export function setDkHours(date: Date, hours: number) {
  * Produces a date string, such as: '10/23/2023, 11:00:00 GMT+2', parsable by Date().
  */
 function dateFormatterEnUsWithTz(timezone: string) {
-    return new Intl.DateTimeFormat('en-US', {
-        timeZone: timezone,
-        hour: 'numeric',
-        hour12: false,
-        minute: 'numeric',
-        month: 'numeric',
-        day: 'numeric',
-        year: 'numeric',
-        timeZoneName: 'short'
-    })
+  return new Intl.DateTimeFormat('en-US', {
+    timeZone: timezone,
+    hour: 'numeric',
+    hour12: false,
+    minute: 'numeric',
+    month: 'numeric',
+    day: 'numeric',
+    year: 'numeric',
+    timeZoneName: 'short',
+  });
 }
 
 /**
  * The setTimezoneHours(), similar to setUTCHours, sets the hours according to the given timezone.
  */
 export function setTimezoneHours(date: Date, hours: number, timezone: string) {
-    const d = new Date(date).setHours(0,0,0,0);
-    const parts = dateFormatterEnUsWithTz(timezone)
-        .formatToParts(date)
-        .map((p) => {
-            if(p.type === 'hour')
-                return hours.toString();
-            return p.value;
-        })
-    return new Date(parts.join(''));
+  const parts = dateFormatterEnUsWithTz(timezone)
+    .formatToParts(date)
+    .map((p) => {
+      if (p.type === 'hour') return hours.toString();
+      return p.value;
+    });
+  return new Date(parts.join(''));
 }
 
 export function formatTime(date: Date): string {
-    const pad = (n: number) => n < 10 ? `0${n}` : `${n}`;
+  const pad = (n: number) => (n < 10 ? `0${n}` : `${n}`);
 
-    const hours = pad(date.getHours());
-    const mins = pad(date.getMinutes());
+  const hours = pad(date.getHours());
+  const mins = pad(date.getMinutes());
 
-    return `${hours}:${mins}`;
+  return `${hours}:${mins}`;
 }

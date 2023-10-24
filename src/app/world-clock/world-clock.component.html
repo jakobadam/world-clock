@@ -3,27 +3,37 @@
 <mat-form-field class="example-full-width">
   <mat-label>Timezone</mat-label>
 
-  <input type="text"
-         name="timezone"
-         placeholder="Pick one"
-         aria-label="Number"
-         matInput
-         [(ngModel)]="selectedTimezone"
-         (input)="filterTimezones($event)"
-         [matAutocomplete]="auto">
+  <input
+    type="text"
+    name="timezone"
+    placeholder="Pick one"
+    aria-label="Number"
+    matInput
+    [(ngModel)]="selectedTimezone"
+    (input)="filterTimezones($event)"
+    [matAutocomplete]="auto"
+  />
 
-  <mat-autocomplete #auto="matAutocomplete" (optionSelected)="addTimezone($event.option.value)">
+  <mat-autocomplete
+    #auto="matAutocomplete"
+    (optionSelected)="addTimezone($event.option.value)"
+  >
     <mat-option *ngFor="let timezone of filteredTimezones" [value]="timezone">
-      {{timezone}}
+      {{ timezone }}
     </mat-option>
   </mat-autocomplete>
 </mat-form-field>
 
 <table *ngIf="now$ | async as now">
   <tr *ngFor="let tz of timezones">
-    <td>{{tz}}</td>
-    <td><h2>{{getTimeInTimezone(now, tz) | time }}</h2></td>
-    <td>08:00 in that timezone is {{ getTimeAtHoursInTimezone(now, 8, tz) | time}} here</td>
+    <td>{{ tz }}</td>
+    <td>
+      <h2>{{ getTimeInTimezone(now, tz) | time }}</h2>
+    </td>
+    <td>
+      08:00 in that timezone is
+      {{ getTimeAtHoursInTimezone(now, 8, tz) | time }} here
+    </td>
   </tr>
 </table>
 
