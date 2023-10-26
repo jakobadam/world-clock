@@ -1,4 +1,9 @@
-import { Component, Pipe } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  Pipe,
+  ViewEncapsulation,
+} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   changeTimezone,
@@ -6,9 +11,6 @@ import {
   getSupportedTimezones,
   setTimezoneHours,
 } from './timezone';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatInputModule } from '@angular/material/input';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FormsModule } from '@angular/forms';
 import { map, timer } from 'rxjs';
 
@@ -28,29 +30,32 @@ export class TimeFormatPipe {
 @Component({
   selector: 'app-world-clock',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatAutocompleteModule,
-    MatInputModule,
-    FormsModule,
-    TimeFormatPipe,
-  ],
+  imports: [CommonModule, FormsModule, TimeFormatPipe],
   templateUrl: './world-clock.component.html',
   styleUrls: ['./world-clock.component.css'],
+  encapsulation: ViewEncapsulation.ShadowDom,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class WorldClockComponent {
   now$ = timer(0, 1000).pipe(map(() => new Date()));
 
   supportedTimezones = SUPPORTED_TIMEZONES;
   filteredTimezones = this.supportedTimezones;
-  selectedTimezone?: string;
+  selectedTimezone = '';
+
+  browserTz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
   timezones: string[] = [
-    'UTC',
     'Europe/Copenhagen',
+    'America/New_York',
     'Europe/London',
     'Europe/Istanbul',
-    'America/New_York',
-  ];
+    'UTC',
+  ].filter((tz) => tz !== this.browserTz);
+
+  hours = [...Array(24).keys()];
+  selectedHour1 = 8;
+  selectedHour2 = 22;
 
   filterTimezones(event: any) {
     const timezonePrefix = event.target.value;
@@ -60,8 +65,9 @@ export class WorldClockComponent {
     );
   }
 
-  addTimezone(timezone: string) {
-    this.timezones.push(timezone);
+  addTimezone() {
+    if (this.selectedTimezone) this.timezones.push(this.selectedTimezone);
+    this.selectedTimezone = '';
   }
 
   getTimeInTimezone(date: Date, tz: string) {
@@ -72,5 +78,20 @@ export class WorldClockComponent {
     const d = new Date(date);
     d.setMinutes(0, 0, 0);
     return setTimezoneHours(d, hours, timezone);
+  }
+
+  getCity(tz: string) {
+    const [continent, city] = tz.split('/');
+    return city ? city.replace('_', ' ') : continent;
+  }
+
+  padHour(hour: number) {
+    return hour < 10 ? '0' + hour : hour;
+  }
+
+  getTime(hour: number) {
+    const d = new Date();
+    d.setHours(hour, 0, 0, 0);
+    return d;
   }
 }

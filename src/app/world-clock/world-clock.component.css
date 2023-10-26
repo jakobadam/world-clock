@@ -1,0 +1,62 @@
+:host {
+    width: 100%;
+    background-color: black;
+    color: white;
+    display: block;
+}
+
+main {
+    padding: 0.5rem;
+    display: grid;
+    grid-template-columns: 1fr;
+}
+
+.timezone {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-areas: "area my-times their-time-now";
+  align-items: center;
+      border-top: 1px solid rgb(75, 75, 75);
+}
+
+.timezone h2 {
+  grid-area: area;
+
+  & small {
+    font-size: 0.5rem;
+  }
+}
+
+.timezone-my-times {
+  grid-area: my-times;
+}
+
+.timezone-time {
+  justify-self: flex-end;
+  grid-area: their-time-now;
+}
+
+/*.cities {*/
+/*    display: grid;*/
+/*}*/
+
+
+
+/*.city-row {*/
+/*    margin-left: 0.5rem;*/
+/*    width: 100%;*/
+/*}*/
+
+/*.city-cell {*/
+
+/*}*/
+
+/*.time-cell {*/
+/*    text-align: right;*/
+/*    font-size: 3rem;*/
+/*}*/
+
+/*.city-cell, .time-cell, .foo {*/
+/*    padding: 0.5rem 0;*/
+/*    border-top: 1px solid rgb(75, 75, 75);*/
+/*}*/

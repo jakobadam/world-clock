@@ -1,40 +1,68 @@
-<h1>World clock</h1>
+<main *ngIf="now$ | async as now">
+  <h1>World clock</h1>
 
-<mat-form-field class="example-full-width">
-  <mat-label>Timezone</mat-label>
+  TODO: Make select pretty:)
+  <div>
+    <select (change)="addTimezone()" [(ngModel)]="selectedTimezone">
+      <option *ngFor="let timezone of supportedTimezones" [value]="timezone">
+        {{timezone}}
+    </select>
+  </div>
 
-  <input
-    type="text"
-    name="timezone"
-    placeholder="Pick one"
-    aria-label="Number"
-    matInput
-    [(ngModel)]="selectedTimezone"
-    (input)="filterTimezones($event)"
-    [matAutocomplete]="auto"
-  />
 
-  <mat-autocomplete
-    #auto="matAutocomplete"
-    (optionSelected)="addTimezone($event.option.value)"
-  >
-    <mat-option *ngFor="let timezone of filteredTimezones" [value]="timezone">
-      {{ timezone }}
-    </mat-option>
-  </mat-autocomplete>
-</mat-form-field>
 
-<table *ngIf="now$ | async as now">
-  <tr *ngFor="let tz of timezones">
-    <td>{{ tz }}</td>
-    <td>
-      <h2>{{ getTimeInTimezone(now, tz) | time }}</h2>
-    </td>
-    <td>
-      08:00 in that timezone is
-      {{ getTimeAtHoursInTimezone(now, 8, tz) | time }} here
-    </td>
-  </tr>
-</table>
+  <div class="timezone">
+    <h2>Me <small>{{getCity(browserTz)}}</small></h2>
 
-<h2>Set alarm in dk time</h2>
+    <div class="timezone-my-times">
+      <select [(ngModel)]="selectedHour1">
+        <option *ngFor="let hour of hours" [value]="hour" [selected]="hour === selectedHour1">
+          {{ padHour(hour) }}:00
+        </option>
+      </select>
+      -
+      <select [(ngModel)]="selectedHour2">
+        <option *ngFor="let hour of hours" [value]="hour" [selected]="hour === selectedHour2">
+          {{ padHour(hour) }}:00
+        </option>
+      </select>
+    </div>
+    <div class="timezone-time">{{now | time}}</div>
+  </div>
+
+  <div class="timezone" *ngFor="let tz of timezones">
+    <h2>{{ getCity(tz) }}</h2>
+    <div class="timezone-relative">
+      {{ getTimeInTimezone(getTime(selectedHour1), tz) | time }} -
+      {{ getTimeInTimezone(getTime(selectedHour2), tz) | time }}
+    </div>
+    <div class="timezone-time">
+      {{ getTimeInTimezone(now, tz) | time }}
+    </div>
+  </div>
+</main>
+
+
+  <!--<mat-form-field class="example-full-width">-->
+  <!--    <mat-label>Timezone</mat-label>-->
+
+  <!--    <input-->
+  <!--            type="text"-->
+  <!--            name="timezone"-->
+  <!--            placeholder="Pick one"-->
+  <!--            aria-label="Number"-->
+  <!--            matInput-->
+  <!--            [(ngModel)]="selectedTimezone"-->
+  <!--            (input)="filterTimezones($event)"-->
+  <!--            [matAutocomplete]="auto"-->
+  <!--    />-->
+
+  <!--    <mat-autocomplete-->
+  <!--        #auto="matAutocomplete"-->
+  <!--        (optionSelected)="addTimezone($event.option.value)"-->
+  <!--    >-->
+  <!--        <mat-option *ngFor="let timezone of filteredTimezones" [value]="timezone">-->
+  <!--            {{ timezone }}-->
+  <!--        </mat-option>-->
+  <!--    </mat-autocomplete>-->
+  <!--</mat-form-field>-->
